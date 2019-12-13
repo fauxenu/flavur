@@ -1,31 +1,55 @@
 {
   "name": "flavur",
   "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-scripts": "3.2.0"
+  "description": "Tracks your favorite frozen custard flavor",
+  "private": false,
+  "license": "MIT",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">= 10"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "clean": "rm -rf ./dist",
+    "start": "webpack-dev-server --progress --color",
+    "build": "npm run clean && webpack --progress",
+    "dist": "npm run clean && webpack --progress --env production",
+    "lint": "eslint . --ext=jsx,js"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "dependencies": {
+    "classnames": "~2.2.6",
+    "linaria": "1.4.0-alpha.1",
+    "prop-types": "~15.7.2",
+    "react": "~16.12.0",
+    "react-dom": "~16.12.0",
+    "react-router-dom": "~5.1.2",
+    "react-transition-group": "~4.3.0",
+    "spacetime": "~6.3.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@babel/core": "~7.7.2",
+    "@babel/plugin-transform-runtime": "~7.6.2",
+    "@babel/preset-env": "~7.7.1",
+    "@babel/preset-react": "~7.7.0",
+    "@babel/runtime": "~7.7.2",
+    "babel-loader": "~8.0.6",
+    "copy-webpack-plugin": "~5.0.5",
+    "core-js": "~3.4.1",
+    "css-loader": "~3.2.0",
+    "file-loader": "~4.2.0",
+    "eslint": "~6.6.0",
+    "eslint-import-resolver-webpack": "~0.11.1",
+    "eslint-loader": "~3.0.2",
+    "eslint-plugin-import": "~2.18.2",
+    "eslint-plugin-jsx-a11y": "~6.2.3",
+    "eslint-plugin-react": "~7.16.0",
+    "eslint-plugin-react-hooks": "~2.3.0",
+    "html-webpack-plugin": "~3.2.0",
+    "mini-css-extract-plugin": "~0.8.0",
+    "optimize-css-assets-webpack-plugin": "~5.0.3",
+    "style-loader": "~1.0.0",
+    "terser-webpack-plugin": "~2.2.1",
+    "webpack": "~4.41.2",
+    "webpack-cli": "~3.3.10",
+    "webpack-dev-server": "~3.9.0"
   }
 }
