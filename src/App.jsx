@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { css } from 'linaria';
 
 import calendarService from './services/calendarService';
@@ -9,15 +9,26 @@ import CalendarPage from './pages/CalendarPage';
 import FavoritesPage from './pages/FavoritesPage';
 import Navbar from './components/Navbar';
 import Spinner from './components/Spinner';
+import PageTransition from './pages/PageTransition';
 
 const appCss = css`
   padding-top: calc(var(--header-height) + 30px);
+
+  .container {
+    position: relative;
+  }
 `;
 
 function App() {
   const [calendar, setCalendar] = useState({});
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const pages = [
+    { Component: HomePage, path: '/', props: { calendar, favorites } },
+    { Component: CalendarPage, path: '/calendar', props: { calendar, favorites } },
+    { Component: FavoritesPage, path: '/favorites', props: { calendar, favorites, updateFavorites }},
+  ]
 
   useEffect(() => {
     setFavorites(favoritesService.getFavorites()), [];
@@ -40,21 +51,19 @@ function App() {
           <main className={appCss}>
             <Navbar />
             <div className="container">
-              <Switch>
-                <Route path="/calendar" exact>
-                  <CalendarPage calendar={calendar} favorites={favorites} />
-                </Route>
-                <Route path="/favorites" exact>
-                  <FavoritesPage
-                    calendar={calendar}
-                    favorites={favorites}
-                    updateFavorites={updateFavorites}
-                  />
-                </Route>
-                <Route path="/" exact>
-                  <HomePage calendar={calendar} favorites={favorites}  />
-                </Route>
-              </Switch>
+              {
+                pages.map(({ path, Component, props }) => (
+                  <Route key={path} path={path} exact>
+                    {
+                      ({ match }) => (
+                        <PageTransition isVisible={match !== null}>
+                          <Component {...props} />
+                        </PageTransition>
+                      )
+                    }
+                  </Route>
+                ))
+              }
             </div>
           </main>
         }
