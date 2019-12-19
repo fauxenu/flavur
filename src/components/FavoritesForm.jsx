@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'linaria';
+import SuggestionPopover from './SuggestionPopover';
 
 const formCss = css`
   position: relative;
@@ -39,9 +40,25 @@ const formCss = css`
 
 function FavoritesForm({ onAdd }) {
   const [value, setValue] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  function reset() {
+    setValue('');
+    setShowSuggestions(false);
+  }
+
+  function handleBlur() {
+    setShowSuggestions(false);
+  }
 
   function handleChange(evt) {
     setValue(evt.target.value);
+    setShowSuggestions(evt.target.value.trim().length > 2);
+  }
+
+  function handleSelect(selectedValue) {
+    onAdd(selectedValue);
+    reset();
   }
 
   function handleSubmit(evt) {
@@ -50,20 +67,28 @@ function FavoritesForm({ onAdd }) {
     const sanitized = value.trim();
     if (sanitized.length) {
       onAdd(sanitized);
-      setValue('');
+      reset();
     }
   }
 
   return (
     <form className={formCss} onSubmit={handleSubmit}>
-      <input
-        className="input"
-        placeholder="Flavor name"
-        type="text"
-        value={value}
-        onChange={handleChange}
+      <div className="form-group">
+        <input
+          className="input"
+          placeholder="Flavor name"
+          type="text"
+          value={value}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <button className="submit" type="submit">+</button>
+      </div>
+      <SuggestionPopover
+        query={value}
+        onSelect={handleSelect}
+        show={showSuggestions}
       />
-      <button className="submit" type="submit">+</button>
     </form>
   );
 }

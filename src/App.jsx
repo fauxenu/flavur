@@ -4,6 +4,7 @@ import { css } from 'linaria';
 
 import calendarService from './services/calendarService';
 import favoritesService from './services/favoritesService';
+import suggestionsService from './services/suggestionsService';
 import HomePage from './pages/HomePage';
 import CalendarPage from './pages/CalendarPage';
 import FavoritesPage from './pages/FavoritesPage';
@@ -33,7 +34,10 @@ function App() {
   useEffect(() => {
     setFavorites(favoritesService.getFavorites()), [];
     calendarService.getCalendar()
-      .then(data => setCalendar(data))
+      .then(data => {
+        setCalendar(data);
+        suggestionsService.importSuggestions(data);
+      })
       .finally(() => setLoading(false));
   }, []);
 

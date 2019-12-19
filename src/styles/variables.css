@@ -70,6 +70,7 @@
 
   /* brand colors */
   --brand-primary: var(--pink-vivid-500);
+  --brand-primary-lightest: var(--pink-vivid-050);
   --brand-secondary: var(--purple-vivid-400);
   --brand-secondary-lightest: var(--purple-vivid-050);
   --brand-info: var(--cyan-vivid-400);

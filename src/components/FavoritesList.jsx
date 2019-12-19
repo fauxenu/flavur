@@ -4,6 +4,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { css } from 'linaria';
 import FavoritesListItem from './FavoritesListItem';
 
+const TIMEOUT = 300;
 const listCss = css`
   .title {
     color: var(--text-muted);
@@ -41,13 +42,13 @@ const listCss = css`
 
   .item-enter-active,
   .item-exit-active {
-    transition: all 0.3s ease-in-out;
+    transition: all ${TIMEOUT}ms ease-in-out;
   }
 `;
 
 function FavoritesList({ favorites, onRemove }) {
   const items = favorites.map(favorite => (
-    <CSSTransition key={favorite} timeout={300} classNames="item">
+    <CSSTransition key={favorite} timeout={TIMEOUT} classNames="item">
       <FavoritesListItem favorite={favorite} onRemove={onRemove} />
     </CSSTransition>
   ));

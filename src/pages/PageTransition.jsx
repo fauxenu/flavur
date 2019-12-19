@@ -3,37 +3,39 @@ import PropTypes from 'prop-types';
 import { CSSTransition } from 'react-transition-group';
 import { css } from 'linaria';
 
+const TIMEOUT = 500;
+
 const transitionCss = css`
-  .page {
-    position: absolute;
-    left: 0;
-    right: 0;
-  }
+  :global() {
+    .page {
+      position: absolute;
+      left: var(--container-padding);
+      right: var(--container-padding);
+    }
 
-  .page-enter {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
+    .page-enter {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
 
-  .page-enter-active {
-    opacity: 1;
-    transform: translateY(0px);
-    transition: opacity 0.5s, transform 0.5s;
-  }
+    .page-enter-active {
+      opacity: 1;
+      transform: translateY(0px);
+      transition: opacity ${TIMEOUT}ms, transform ${TIMEOUT}ms;
+    }
 
-  .page-exit {
-    opacity: 1;
-    transform: translateY(0px);
-  }
+    .page-exit {
+      opacity: 1;
+      transform: translateY(0px);
+    }
 
-  .page-exit-active {
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.5s, transform 0.5s;
+    .page-exit-active {
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity ${TIMEOUT}ms, transform ${TIMEOUT}ms;
+    }
   }
 `;
-
-const TIMEOUT = 500
 
 function PageTransition({ isVisible, children }) {
   return (
