@@ -10,24 +10,30 @@ const trackerCss = css`
 `;
 
 function NextFavoriteTracker({ calendar, favorites }) {
-  const today = dateUtils.getToday();
+  const today = new Date();
   const nextFavorite = calendar.items.find(({ start, summary }) => {
     if (favorites.includes(summary)) {
       const date = dateUtils.getCalendarDate(start);
-      return date.isAfter(today);
+      return date > today;
     }
     return false;
   });
   const daysAway = nextFavorite
-    ? today.diff(dateUtils.getCalendarDate(nextFavorite.start), 'day') + 1
+    ? dateUtils.diff(dateUtils.getCalendarDate(nextFavorite.start), today)
     : 0;
 
   return (
     <p className={trackerCss}>
-      { nextFavorite &&
+      { nextFavorite && daysAway === 1 &&
         <span>
-          Only <strong>{daysAway}</strong> {daysAway > 1 ? 'days' : 'day'} until
-          it&apos;s <span className="secondary">{nextFavorite.summary}</span> time!
+          <strong>Tomorrow</strong> is&nbsp;
+          <span className="secondary">{nextFavorite.summary}</span> day!
+        </span>
+      }
+      { nextFavorite && daysAway > 1 &&
+        <span>
+          Only <strong>{daysAway}</strong> days until it&apos;s&nbsp;
+          <span className="secondary">{nextFavorite.summary}</span> time!
         </span>
       }
       {

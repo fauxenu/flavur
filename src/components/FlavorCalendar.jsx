@@ -38,14 +38,14 @@ const calendarCss = css`
 `;
 
 function FlavorCalendar({ calendar, favorites }) {
-  const currentMonth = new Date().toISOString().replace(/-\d{2}T.*$/, '');
+  const currentMonth = new Date().getMonth();
   const days = calendar.items
     .filter(({ start }) => {
-      const { dateTime, date } = start;
-      return (dateTime || date).includes(currentMonth);
+      const date = dateUtils.getCalendarDate(start);
+      return date.getMonth() === currentMonth;
     });
   const firstDate = dateUtils.getCalendarDate(days[0].start);
-  const spacerOffset = firstDate.day();
+  const spacerOffset = firstDate.getDay();
 
   return (
     <div className={calendarCss}>

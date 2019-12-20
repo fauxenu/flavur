@@ -1,27 +1,27 @@
-import spacetime from 'spacetime';
-import config from '@/config/calendar.json';
-
-const TIMEZONE = config.defaultTimezone;
+const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
 export default {
-  getToday() {
-    const today = spacetime.now();
-    today.goto(TIMEZONE);
-    return today;
-  },
-
   getCalendarDate({ dateTime, date }) {
-    const s = spacetime(dateTime || date);
-    s.goto(TIMEZONE);
-    return s;
+    return new Date(dateTime || date);
   },
 
   isWeekend(date) {
-    const dayOfWeek = date.day();
+    const dayOfWeek = date.getDay();
     return dayOfWeek === 0 || dayOfWeek === 6;
   },
 
   isToday(date) {
-    return this.getToday().isSame(date, 'day');
+    const today = new Date();
+    return today.getDate() === date.getDate()
+      && today.getMonth() === date.getMonth()
+      && today.getFullYear() === date.getFullYear();
+  },
+
+  format({ date = new Date(), options = {} } = {}) {
+    return new Intl.DateTimeFormat('en-US', options).format(date)
+  },
+
+  diff(dateA, dateB) {
+    return Math.ceil((dateA - dateB) / DAY_IN_MS);
   }
 }

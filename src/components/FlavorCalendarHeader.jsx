@@ -1,6 +1,5 @@
 import React from 'react';
 import { css } from 'linaria';
-import spacetime from 'spacetime';
 
 const headerCss = css`
   border-bottom: 1px solid var(--brand-grey-dark);
@@ -62,7 +61,7 @@ const DAYS = [
 ];
 
 function FlavorCalendarHeader() {
-  const monthName = spacetime.now().format('month');
+  const monthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(new Date());
 
   return (
     <header className={headerCss}>

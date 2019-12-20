@@ -44,11 +44,11 @@ const dayCss = css`
   }
 
   &.today {
-    background-color: var(--brand-secondary-lightest);
+    @media screen and (max-width: 767px) {
+      background-color: var(--brand-secondary-lightest);
+    }
 
     @media screen and (min-width: 768px) {
-      background-color: inherit;
-
       .date {
         border-radius: 50%;
         background-color: var(--brand-primary);
@@ -81,6 +81,7 @@ const dayCss = css`
 function FlavorCalendarDay({ day, favorites }) {
   const { start, summary } = day;
   const date = dateUtils.getCalendarDate(start);
+  const dayName = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(date);
   const className = classnames({
     [dayCss]: true,
     weekend: dateUtils.isWeekend(date),
@@ -90,8 +91,8 @@ function FlavorCalendarDay({ day, favorites }) {
   return (
     <li className={className}>
       <span className="date">
-        <span className="date__label">{ date.format('day') }&nbsp;</span>
-        <span className="date__day">{ date.date() }</span>
+        <span className="date__label">{ dayName }&nbsp;</span>
+        <span className="date__day">{ date.getDate() }</span>
       </span>
       <p className={classnames({ flavor: true, favorite: favorites.includes(summary) })}>
         { summary }
