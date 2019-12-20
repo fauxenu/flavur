@@ -32,17 +32,26 @@ function App() {
   ]
 
   useEffect(() => {
-    setFavorites(favoritesService.getFavorites()), [];
-    calendarService.getCalendar()
-      .then(data => {
-        setCalendar(data);
-        suggestionsService.importSuggestions(data);
-      })
-      .finally(() => setLoading(false));
+    let didCancel = false;
+
+    const fetchData = async () => {
+      setLoading(true);
+      const calendar = await calendarService.getCalendar();
+      const favorites = await favoritesService.getFavorites();
+      if (!didCancel) {
+        setCalendar(calendar);
+        setFavorites(favorites);
+        await suggestionsService.importSuggestions(calendar);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+    return () => (didCancel = true);
   }, []);
 
-  function updateFavorites(newFavorites) {
-    favoritesService.setFavorites(newFavorites);
+  async function updateFavorites(newFavorites) {
+    await favoritesService.setFavorites(newFavorites);
     setFavorites(newFavorites);
   }
 

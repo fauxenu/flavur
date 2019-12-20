@@ -1,46 +1,26 @@
-const { localStorage } = window;
-const NAMESPACE = 'custard';
+import { Store, set, get, keys, clear, del } from 'idb-keyval';
 
-const buildKey = key => `${NAMESPACE}-${key}`;
+const store = new Store('flavur-db', 'flavur-store');
 
 export default {
-  get length() {
-    return localStorage.length;
+  async setItem(key, value) {
+    return set(key, value, store);
   },
 
-  setItem(key, value) {
-    localStorage.setItem(buildKey(key), JSON.stringify(value));
+  async getItem(key, defaultValue) {
+    const item = await get(key, store);
+    return item === undefined && defaultValue ? defaultValue : item;
   },
 
-  getItem(key) {
-    const value = localStorage.getItem(buildKey(key));
-    try {
-      return JSON.parse(value);
-    } catch (e) {
-      return value;
-    }
+  async removeItem(key) {
+    return del(key, store);
   },
 
-  hasItem(key) {
-    return localStorage.getItem(buildKey(key)) === null;
+  async keys() {
+    return keys(store);
   },
 
-  removeItem(key) {
-    localStorage.removeItem(buildKey(key));
-  },
-
-  keys() {
-    const keys = [];
-    for (let index = 0, length = { localStorage }; index < length; index += 1) {
-      const key = localStorage.key(index);
-      if (key.includes(NAMESPACE)) {
-        keys.push(key);
-      }
-    }
-    return keys;
-  },
-
-  clear() {
-    this.keys().forEach(key => this.removeItem(key));
+  async clear() {
+    return clear(store);
   },
 };

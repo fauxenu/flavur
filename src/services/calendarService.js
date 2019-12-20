@@ -10,11 +10,11 @@ const isStale = ({ items = [] }) => {
 
 export default {
   async getCalendar() {
-    const localCalendar = storageService.getItem(STORAGE_KEY);
+    const localCalendar = await storageService.getItem(STORAGE_KEY);
 
     if (!localCalendar || isStale(localCalendar)) {
       const data = await this.fetchRemoteCalendar();
-      storageService.setItem(STORAGE_KEY, data);
+      await storageService.setItem(STORAGE_KEY, data);
       return data;
     }
     return localCalendar;

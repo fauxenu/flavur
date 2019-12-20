@@ -51,9 +51,18 @@ function SuggestionPopover({ show, query, onSelect }) {
   const [suggestions, setSuggestions] = useState([]);
 
   useLayoutEffect(() => {
-    if (query.trim().length > 2) {
-      setSuggestions(suggestionsService.findSuggestions(query.trim()));
-    }
+    let didCancel = false;
+    const fetchSuggestions = async () => {
+      if (query.trim().length > 2) {
+        const matches = await suggestionsService.findSuggestions(query);
+        if (!didCancel) {
+          setSuggestions(matches);
+        }
+      }
+    };
+
+    fetchSuggestions();
+    return () => (didCancel = true);
   }, [query, show]);
 
   return (
